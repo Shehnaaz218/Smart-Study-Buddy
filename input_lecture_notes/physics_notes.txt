@@ -1,0 +1,9 @@
+Newton's Laws of Motion
+
+Newton's first law states that an object remains at rest or in uniform straight-line motion unless acted upon by a net external force.
+
+Newton's second law states that net force equals mass multiplied by acceleration: F = ma.
+
+Newton's third law states that every action force has an equal and opposite reaction force.
+
+Gravity is the attractive force between objects that have mass. Earth's gravity pulls objects toward its center.

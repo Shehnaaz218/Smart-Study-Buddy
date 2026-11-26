@@ -1,0 +1,11 @@
+Python Data Structures
+
+A list is an ordered, mutable collection that can contain duplicate values.
+
+A tuple is an ordered, immutable collection. Once created, its elements cannot be reassigned.
+
+A dictionary stores data as key-value pairs. Keys must be hashable and unique within the dictionary.
+
+A set stores unique elements and is useful for membership testing and removing duplicates.
+
+Time complexity describes how an algorithm's resource usage grows as the input size increases. Common complexities include O(1), O(log n), O(n), and O(n squared).
