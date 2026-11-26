@@ -1,46 +1,75 @@
-# Smart Study Buddy
+# Smart Study Buddy 📚
 
-An AI-powered, document-grounded study assistant that helps students understand lecture notes, ask questions, generate practice quizzes, and maintain conversational context across study sessions.
+An AI-powered study assistant that helps students understand lecture notes, ask questions, generate quizzes, and revisit previous conversations using Retrieval-Augmented Generation (RAG).
 
-## Features
+## 🚀 Project Overview
 
-- **Retrieval-Augmented Generation (RAG):** Retrieves relevant information from uploaded lecture notes using semantic similarity search.
-- **Document Ingestion:** Loads, splits, and processes lecture-note text files using LangChain components.
-- **Vector Search:** Stores and retrieves document embeddings using Pinecone.
-- **AI-Powered Question Answering:** Uses OpenAI to generate answers grounded in retrieved lecture-note content.
-- **Conversational Memory:** Maintains context across multiple messages within the same conversation using SQLite-backed session history.
-- **Conversation Isolation:** Keeps separate conversations independent of one another.
-- **Conversation History:** Saves and retrieves previous conversations and messages.
-- **Automatic Conversation Titles:** Generates conversation titles from the first user message.
-- **Quiz Generation:** Creates multiple-choice quizzes from relevant lecture notes, including answers and explanations.
-- **Source References:** Displays the lecture-note sources used to generate answers.
+Smart Study Buddy uses semantic search and Large Language Models to provide answers grounded in uploaded lecture notes. It retrieves relevant content from a Pinecone vector database and generates contextual responses using the OpenAI API.
 
-## Technology Stack
+The application also supports subject-wise retrieval, quiz generation, conversation history, and session-based conversational memory.
 
-| Component | Technology |
+## ✨ Features
+
+- **AI Question Answering:** Ask questions about uploaded lecture notes.
+- **RAG Pipeline:** Retrieve relevant document chunks using semantic similarity.
+- **Subject-wise Retrieval:** Filter content by Biology, Physics, and Computer Science.
+- **AI Quiz Generation:** Generate multiple-choice quizzes from selected subjects.
+- **Source References:** Display the lecture-note sources used to generate answers.
+- **Conversation History:** Save and reopen previous conversations.
+- **Conversational Memory:** Maintain context within a conversation.
+- **Conversation Isolation:** Keep separate conversations independent.
+- **Out-of-Scope Handling:** Indicate when information is unavailable in the uploaded notes.
+
+## 🛠️ Technology Stack
+
+| Component | Technologies |
 |---|---|
-| Programming Language | Python |
-| Frontend | React, Vite |
-| Backend | FastAPI |
-| LLM | OpenAI API (GPT-4o-mini by default) |
-| Embedding Model | sentence-transformers/all-MiniLM-L6-v2 |
+| Frontend | React, Vite, JavaScript |
+| Backend | Python, FastAPI |
+| LLM | OpenAI API, GPT-4o-mini |
 | Vector Database | Pinecone |
-| Document Processing | LangChain Community, LangChain Text Splitters |
-| Conversation Storage | SQLite |
-| API Server | Uvicorn |
+| Embeddings | Sentence Transformers, all-MiniLM-L6-v2 |
+| RAG | Semantic search and vector retrieval |
+| Database | SQLite |
+| API | REST API |
 
-## Architecture
+## 🏗️ System Architecture
 
-1. The student submits a question through the React frontend.
-2. FastAPI receives the question and active conversation details.
-3. The embedding model converts the question into a vector.
-4. Pinecone retrieves relevant lecture-note chunks.
-5. FastAPI retrieves previous messages from the same conversation using SQLite.
-6. Retrieved document context and conversation history are supplied to OpenAI.
-7. OpenAI generates a response grounded in the available lecture notes and relevant conversation context.
-8. The assistant response is saved in SQLite and displayed in the frontend.
+```text
+             STUDENT
+                |
+                v
+        REACT FRONTEND
+                |
+                v
+         FASTAPI BACKEND
+                |
+          User Question
+                |
+                v
+       SENTENCE TRANSFORMERS
+          (Embeddings)
+                |
+                v
+         PINECONE VECTOR DB
+                |
+        Relevant Note Chunks
+                |
+                v
+           OPENAI API
+                |
+        Generated Response
+                |
+                v
+          REACT FRONTEND
+                |
+                v
+       ANSWER + SOURCE REFERENCES
+```
 
-## Project Structure
+SQLite stores conversation and message history.
+
+## 📂 Project Structure
 
 ```text
 IK_LLM_ASSIGNMENT/
@@ -48,23 +77,22 @@ IK_LLM_ASSIGNMENT/
 ├── backend/
 │   ├── main.py
 │   ├── database.py
-│   ├── ingest_notes.py
-│   └── chat_history.db       # Generated locally; not committed
+│   └── ingest_notes.py
 │
 ├── frontend/
+│   ├── public/
 │   ├── src/
 │   │   ├── App.jsx
 │   │   ├── App.css
+│   │   ├── index.css
 │   │   └── main.jsx
 │   ├── package.json
-│   └── ...
+│   └── vite.config.js
 │
 ├── input_lecture_notes/
 │   ├── biology_notes.txt
 │   ├── computer_science_notes.txt
-│   ├── physics_notes.txt
-│   ├── sample_lecture.txt
-│   └── sample_lecture1.txt
+│   └── physics_notes.txt
 │
 ├── .env.example
 ├── .gitignore
@@ -72,74 +100,47 @@ IK_LLM_ASSIGNMENT/
 └── README.md
 ```
 
-## Prerequisites
-
-- Python 3.12 or compatible version
-- Node.js and npm
-- OpenAI API key
-- Pinecone account and API key
-
-## Installation and Setup
+## ⚙️ Installation and Setup
 
 ### 1. Clone the repository
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
-cd IK_LLM_ASSIGNMENT
+git clone https://github.com/Shehnaaz218/Smart-Study-Buddy.git
+cd Smart-Study-Buddy
 ```
 
-### 2. Create a Python virtual environment
+### 2. Set up the Python environment
 
 ```bash
 python -m venv .venv
 ```
 
-Activate it on Windows PowerShell:
+Activate it on Windows:
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
 ```
 
-### 3. Install backend dependencies
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Configure environment variables
+### 3. Configure environment variables
 
-Create a `.env` file in the project root using `.env.example` as a template.
+Create a `.env` file in the project root using `.env.example` as a reference.
+
+Add your credentials:
 
 ```env
 OPENAI_API_KEY=your_openai_api_key
 PINECONE_API_KEY=your_pinecone_api_key
-OPENAI_MODEL=gpt-4o-mini
 ```
 
-Do not upload your actual `.env` file or API keys to GitHub.
+Never commit your actual `.env` file or API keys to GitHub.
 
-### 5. Configure Pinecone
-
-Create a Pinecone index with the following configuration:
-
-- Index name: `smart-study-buddy-notes`
-- Dimension: `384`
-- Metric: `cosine`
-- Vector type: Dense
-
-The embedding model used is `sentence-transformers/all-MiniLM-L6-v2`.
-
-### 6. Ingest lecture notes
-
-From the project root, run:
-
-```bash
-python -m backend.ingest_notes
-```
-
-The current ingestion script processes the Biology, Computer Science, and Physics note files.
-
-### 7. Start the FastAPI backend
+### 4. Start the backend
 
 From the project root:
 
@@ -149,102 +150,53 @@ python -m uvicorn backend.main:app --reload
 
 Backend URL:
 
-```text
-http://127.0.0.1:8000
-```
+`http://127.0.0.1:8000`
 
 API documentation:
 
-```text
-http://127.0.0.1:8000/docs
-```
+`http://127.0.0.1:8000/docs`
 
-Health check:
+### 5. Start the frontend
 
-```text
-http://127.0.0.1:8000/api/health
-```
-
-### 8. Install frontend dependencies
-
-Open a second terminal:
+Open another terminal:
 
 ```bash
 cd frontend
 npm install
-```
-
-### 9. Start the React frontend
-
-```bash
 npm run dev
 ```
 
-Open the application:
+Frontend URL:
 
-```text
-http://localhost:5173/
-```
+`http://localhost:5173`
 
-## API Endpoints
+## 🧪 Tested Functionality
 
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/health` | Check backend status |
-| POST | `/api/chat` | Ask questions using RAG and conversational memory |
-| POST | `/api/quiz` | Generate multiple-choice quizzes |
-| POST | `/api/conversations` | Create a conversation |
-| GET | `/api/conversations` | Retrieve conversation history |
-| POST | `/api/conversations/{conversation_id}/messages` | Save a conversation message |
-| GET | `/api/conversations/{conversation_id}/messages` | Retrieve messages from a conversation |
+The following functional checks were completed during development:
 
-## Conversational Memory
+- Physics, Biology, and Computer Science question answering.
+- Subject-specific source retrieval.
+- Subject-specific quiz generation.
+- Out-of-scope question handling.
+- Conversation memory within a session.
+- Isolation between separate conversations.
 
-Smart Study Buddy uses SQLite to persist conversation messages.
+These are functional checks, not a formal benchmark of retrieval accuracy.
 
-For each chat request:
+## 🔮 Future Enhancements
 
-- The frontend sends the active conversation ID and current saved message ID.
-- The backend retrieves up to 10 previous messages from that conversation.
-- Previous messages are supplied to the LLM along with the retrieved lecture-note context.
-- A new conversation starts with independent conversation history.
-
-This enables multi-turn interactions while keeping separate study sessions isolated.
-
-## Testing and Validation
-
-The following functionality has been manually tested:
-
-- Backend startup and health endpoint.
-- Frontend application startup.
-- Pinecone retrieval and source references.
-- Academic question answering using lecture notes.
-- Quiz generation with five multiple-choice questions.
-- SQLite conversation persistence.
-- Automatic conversation title generation.
-- Multi-turn conversational memory.
-- Conversation isolation between new and existing sessions.
-
-The current project contains five lecture-note text files, while the ingestion script processes three of them.
-
-## Security
-
-- API keys are stored in a local `.env` file.
-- `.env` is excluded from Git tracking.
-- Virtual environments, frontend dependencies, build output, and SQLite database files are excluded through `.gitignore`.
-- `.env.example` provides placeholder configuration only.
-
-## Future Improvements
-
-- Support PDF lecture-note ingestion.
-- Add automated backend and frontend tests.
-- Evaluate retrieval relevance using a larger question-answer test set.
-- Add document upload functionality.
-- Improve conversational memory management for longer sessions.
+- Support PDF and DOCX lecture-note uploads.
+- Add automated RAG evaluation metrics.
+- Improve retrieval ranking and answer relevance.
+- Add user authentication.
 - Deploy the application to a cloud platform.
 
-## Author
+## 👩‍💻 Author
 
-**Shahanaz Begum**
+**Shaik Shahanaz Begum**
 
-Computer Science and Engineering | Generative AI | Python | RAG | FastAPI
+GitHub: [Shehnaaz218](https://github.com/Shehnaaz218)
+
+## 📌 Repository
+
+[Smart Study Buddy – GitHub](https://github.com/Shehnaaz218/Smart-Study-Buddy)
